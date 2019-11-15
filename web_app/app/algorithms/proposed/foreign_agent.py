@@ -12,8 +12,10 @@ class ForeignAgent:
         self.Kfa = hash(self.IDfa + self.b)
         home_agent.agent_registration_2(self.IDfa, self.Kfa, self)
 
+
     def agent_registration_3(self, SKfa):
         self.SKfa = SKfa
+
 
     def aesk_step_2(self, home_agent, EID1, Vm, Qm, Nm):
         print('Step 2')
@@ -78,5 +80,3 @@ class ForeignAgent:
 
         self.Kmf = mobile_user.Kmf
         return 1
-
-

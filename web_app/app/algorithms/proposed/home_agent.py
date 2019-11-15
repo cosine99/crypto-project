@@ -1,10 +1,12 @@
 from utility import *
 
 
+
 class HomeAgent:
     
     def __init__(self):
         self.SKha = 'SKha'
+
 
 
     def agent_registration_2(self, IDfa, Kfa, foreign_agent):

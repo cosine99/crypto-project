@@ -74,6 +74,7 @@ class MobileUser:
 
         foreign_agent.aesk_step_6(self.Qmf)
 
+
         print('AESK Phase Completed')
 
     def session_key_update(self, home_agent, foreign_agent):
@@ -117,12 +118,3 @@ class MobileUser:
     def password_altered_4(self, Snew):
         self.SPW = xor(xor(Snew, hash(self.PWmu)), hash(self.IDmu + self.s))
         print('Successful')
-
-if __name__ == '__main__':
-    home_agent = HomeAgent()
-    foreign_agent = ForeignAgent()
-    user = MobileUser()
-    user.registration(home_agent, foreign_agent)
-    user.aesk_step_1(home_agent, foreign_agent)
-    user.session_key_update(home_agent, foreign_agent)
-    user.password_altered(home_agent, foreign_agent)
