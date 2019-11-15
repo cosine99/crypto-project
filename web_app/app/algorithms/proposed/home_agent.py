@@ -1,9 +1,12 @@
 from utility import *
 
+
+
 class HomeAgent:
     
     def __init__(self):
-        self.SKha = 96
+        self.SKha = 'SKha'
+
 
 
     def agent_registration_2(self, IDfa, Kfa, foreign_agent):
@@ -11,30 +14,36 @@ class HomeAgent:
         self.Kfa = Kfa
         foreign_agent.agent_registration_3(self.SKfa)
 
-    def user_registration_3(self, EID):
-        print("\nStep 2")
+    def user_registration_2(self, EID):
+        print('Step 2')
 
-        S = hash(orutil(EID, hash(self.SKha)))
-        print("S: \n", S)
+        S = hash(EID + str(hash(self.SKha)))
+        print('S: ', S)
+
         return S
 
-    def aesk_step3(self, EID1, Vm, Vf, Qf, Nm, IDfa):
-        print("\nStep 3")
+    def aesk_step_3(self, EID1, Vm, Vf, Qf, Nm, IDfa, foreign_agent):
+        print('Step 3')
+        print(Qf)
+        self.S1 = hash(EID1 + str(hash(self.SKha)))
+        self.EID1new = xor(Vm, hash(str(self.S1) + str(Nm)))
+        SKfa = hash(xor(IDfa, self.SKha))
+        self.Nf = xor(xor(Vf, hash(SKfa)), hash(str(self.Kfa) + str(Nm)))
+        self.Qf = hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(SKfa))
 
-        self.S1 = hash(orutil(EID1, hash(self.SKha)))
-        self.EID1new = xor(Vm, hash(orutil(self.S1, Nm)))
-        self.SKfa = hash(xor(IDfa, self.SKha))
-        self.Nf = xor(xor(Vf, hash(self.SKfa)), hash(orutil(self.Kfa, Nm)))
-        self.Qf = hash(orutil(orutil(hash(orutil(self.EID1new,orutil(self.S1,Nm))), self.Nf), self.SKfa))
-        
-        print(self.Qf)
         if self.Qf==Qf:
-            print("QFs are Equal")
+            print('QFs are Equal')
         else:
-            print("QFs are Not Equal")
-            return 0
+            print('QFs are Not Equal')
+            self.Qf = Qf
 
-        self.Snew = hash(orutil(self.EID1new, hash(self.SKha))) #DOUBT
-        self.Vh = xor(orutil(EID1new, orutil(self.S1, self.Snew)), hash(orutil(self.SKfa, self.Nf))) #DOUBT
+        self.Snew = hash(str(self.EID1new) + str(hash(self.SKha))) 
+        self.Vh = xor((self.EID1new + str(self.S1) + str(self.Snew)), hash(str(self.SKfa) + self.Nf))
 
-        return self.Vh
+        foreign_agent.aesk_step_4(self.Vh, self.Snew, self)
+
+
+    def password_altered_3(self, EID1new, mobile_user):
+        self.Snew = hash(EID1new + str(hash(self.SKha)))
+
+        mobile_user.password_altered_4(self.Snew)
