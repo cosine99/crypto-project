@@ -56,3 +56,27 @@ class ForeignAgent:
 
         return 1
 
+    def sk_update_2(self, Um, Qstarm, mobile_user):
+        self.Nstarm = xor(Um, hash(str(self.Snew) + self.Nm + self.Nf2))
+        if(Qstarm != hash(xor(self.Nstarm, self.Snew))):
+            print('Qstarm doesnt match')
+            return 0
+
+        self.Nstarf = input('New Nstarf')
+
+        self.Uf = xor(self.Nstarf, hash(str(self.Snew) + self.Nf2 + self.Nstarm))
+
+        self.Qstarf = hash(xor(self.Nstarf, self.Snew))
+
+        mobile_user.sk_update_3(self.Uf, self.Qstarf)
+
+
+    def sk_update_4(self, Qstarmf, mobile_user):
+        if(Qstarmf != hash(xor(xor(self.Nstarm, self.Nstarf), self.Snew))):
+            print('Qstarmf doesnt match')
+            return 0
+
+        self.Kmf = mobile_user.Kmf
+        return 1
+
+

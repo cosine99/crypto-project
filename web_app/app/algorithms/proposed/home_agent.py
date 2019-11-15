@@ -27,9 +27,7 @@ class HomeAgent:
         self.EID1new = xor(Vm, hash(str(self.S1) + str(Nm)))
         SKfa = hash(xor(IDfa, self.SKha))
         self.Nf = xor(xor(Vf, hash(SKfa)), hash(str(self.Kfa) + str(Nm)))
-        self.Qf = hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(SKfa))        
-        print("self.qf", self.Qf)
-        print("qf local wala",Qf)
+        self.Qf = hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(SKfa))
 
         if self.Qf==Qf:
             print('QFs are Equal')
@@ -41,3 +39,9 @@ class HomeAgent:
         self.Vh = xor((self.EID1new + str(self.S1) + str(self.Snew)), hash(str(self.SKfa) + self.Nf))
 
         foreign_agent.aesk_step_4(self.Vh, self.Snew, self)
+
+
+    def password_altered_3(self, EID1new, mobile_user):
+        self.Snew = hash(EID1new + str(hash(self.SKha)))
+
+        mobile_user.password_altered_4(self.Snew)
