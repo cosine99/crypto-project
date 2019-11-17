@@ -4,12 +4,9 @@ from foreign_agent import ForeignAgent
 
 class MobileUser:
 
-    def __init__(self):
-        pass
-
     def registration(self, home_agent, foreign_agent):
-        print('Agent Registration Phase:')
-        foreign_agent.agent_registration_1(home_agent, self)
+        # print('Agent Registration Phase:')
+        # foreign_agent.agent_registration_1(home_agent, self)
 
         print('User Registration Phase:')
 
@@ -37,6 +34,10 @@ class MobileUser:
 
         print('pw of mu : ', self.PWmu)
         self.PW1mu = input('Enter password PW\'mu : ')
+
+        # IMPLEMENT MATCH PASSWORD
+
+        
         self.snew = input('MU selects a ran number : ')
         self.Nm = input('MU selects a ran number : ')
         s = xor(self.s1, hash(self.IDmu + self.PW1mu))
@@ -55,7 +56,7 @@ class MobileUser:
         print('Vm: ', self.Vm)
         print('Qm: ', self.Qm)
 
-        foreign_agent.aesk_step_2(home_agent, self.EID1, self.Vm, self.Qm, self.Nm)
+        foreign_agent.aesk_step_2(self.EID1, self.Vm, self.Qm, self.Nm, home_agent, self)
 
     def aesk_step_5(self, Vf2, Qf2, Nf2, foreign_agent):
         self.Snew = xor(Vf2, hash(str(self.S) + Nf2))
