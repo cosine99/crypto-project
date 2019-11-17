@@ -21,7 +21,7 @@ class HomeAgent:
         self.EID1new = xor(Vm, hash(str(self.S1) + str(Nm)))
         self.SKfa = hash(xor(IDfa, self.SKha))
         self.Nf = xor(Vf, hash(self.SKfa))
-        self.Qf = hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(self.SKfa))
+        self.Qf = str(hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(self.SKfa)))
         print('self.qf : ', self.Qf)
         if self.Qf == Qf:
             print('\nQFs are Equal !!!!!!!!\n\n')
@@ -33,3 +33,4 @@ class HomeAgent:
         self.Vh = xor((self.EID1new + str(self.S1) + str(self.Snew)), hash(str(self.SKfa) + self.Nf))
 
         foreign_agent.aesk_step_4(self.Vh, self.Snew, self)
+        

@@ -4,13 +4,11 @@ from foreign_agent import ForeignAgent
 
 class MobileUser:
 
-    def __init__(self):
-        self.IDmu = 78
-
     def registration(self, home_agent, foreign_agent):
         print('User Registration Phase:')
 
         print('Step 1')
+        self.IDmu = input('Enter IDmu: ')
         self.PWmu = input('Enter PWmu: ')
         self.s = input('Enter a random number: ')
 
@@ -31,21 +29,23 @@ class MobileUser:
         print("pw of mu : \n", self.PWmu)
 
         self.PW1mu = (input('MU inputs password : '))
+
+        # IMPLEMENT MATCH PASSWORD
+
         self.snew = (input('MU selects a ran number : '))
         self.Nm = (input('MU selects a ran number : '))
-        self.EID1 = xor(hash(xor(self.IDmu,self.PW1mu)),self.s)
+        self.EID1 = xor(hash(xor(self.IDmu, self.PW1mu)), self.s)
         print("EID1: \n", self.EID1)
-        self.S1 = xor(self.SPW,hash(self.PW1mu))
-        self.EIDnew = xor(hash(xor((self.IDmu),self.PW1mu)),self.snew)
+        self.S1 = xor(self.SPW, hash(self.PW1mu))
+        self.EIDnew = xor(hash(xor((self.IDmu), self.PW1mu)), self.snew)
         self.Vm = xor(self.EIDnew, hash(str(self.S1) + self.Nm))
-        self.Qm = hash (str(self.S1)+ self.Nm + self.EIDnew)
+        self.Qm = str(hash(self.EIDnew + str(self.S1) + self.Nm))
 
         print("S1: \n", self.S1)
         print("EIDnew: \n", self.EIDnew)
         print("Vm: \n", self.Vm)
         print("Qm: \n", self.Qm)
-        foreign_agent.a_step2(home_agent, self.EID1, self.Vm, self.Qm, self.Nm)
-        print('AESK Phase Completed')
+        foreign_agent.a_step2(self.EID1, self.Vm, self.Qm, self.Nm, home_agent, self)
 
     def password_altered(self, home_agent, foreign_agent):
         pass
@@ -66,6 +66,7 @@ class MobileUser:
         self.Qmf = hash(self.Nm + str(self.S) + Nf2 + self.Snew)
 
         foreign_agent.aesk_step_6(self.Qmf)
+
         print('AESK Phase Completed')
 
     def session_key_update(self, home_agent, foreign_agent):
@@ -89,6 +90,22 @@ class MobileUser:
 
         print('Successful')
 
+    def password_altered(self):
+        print('password_altered phase')
+
+        IDmu = input('Input IDmu')
+        PWmu = input('Input PWmu')
+
+        if(self.IDmu != IDmu or self.PWmu != PWmu):
+            print('Credentials dont match')
+            return 0
+        self.s = xor(self.s1, hash(self.IDmu + self.PWmu))
+        self.PWmu = input('new password')
+        
+        self.EIDnew = xor(hash(xor(self.IDmu, PWmu)), self.s)
+
+        self.SPW = xor(Snew, hash(self.PWmu))
+
 if __name__ == '__main__':
     home_agent = HomeAgent()
     foreign_agent = ForeignAgent()
@@ -98,4 +115,7 @@ if __name__ == '__main__':
     print('\nRegistration Completed')
     print('\nAESK phase \n')
     user.aesk(home_agent, foreign_agent)
-    print('\nAESK phase completed')
+    print('\nSK update phase \n')
+    user.session_key_update(home_agent, foreign_agent)
+    print('\nAlter password \n')
+    user.password_altered()

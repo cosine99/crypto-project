@@ -5,14 +5,15 @@ class ForeignAgent:
         self.SKfa = 63
         self.IDfa = 23
 
-    def a_step2(self, home_agent, EID1, Vm, Qm, Nm):
+    def a_step2(self, EID1, Vm, Qm, Nm, home_agent, mobile_user):
+        self.mobile_user = mobile_user
         print("\nStep 2")
 
         self.Qm = Qm
         self.EIDnew = EID1
         self.Nm = Nm
         self.Nf = input('Foreign Agent chooses a rand number : ')
-        self.Qf = hash(str(self.Nf)+str(self.SKfa)+ str(Qm))
+        self.Qf = hash(str(Qm) + str(self.Nf) + str(self.SKfa))
         self.Vf = xor(self.Nf, hash(self.SKfa))
         
         print('Nf: ', self.Nf)
@@ -23,7 +24,7 @@ class ForeignAgent:
 
     def aesk_step_4(self, Vh, Snew, home_agent):
         self.Snew = Snew
-        temp = xor(Vh, hash(str(self.SKfa) + str(self.Nf)))
+        temp = xor(Vh, hash(str(self.SKfa) + self.Nf))
         print(str(temp))
         if(self.Qm == str(hash(str(self.EIDnew) + str(Snew) + str(self.Nm)))): #JUGAAD HERE
             print(' Qm matches')
@@ -34,8 +35,7 @@ class ForeignAgent:
         self.Nf2 = input('Enter another random number')
         self.Vf2 = xor(Snew, hash(str(Snew) + self.Nf2))
         self.Qf2 = hash(self.EIDnew + str(self.Snew) + self.Nf2)
-
-        self.mobile_user = MobileUser()
+        
         self.mobile_user.aesk_step_5(self.Vf2, self.Qf2, self.Nf2, self)
 
     def aesk_step_6(self, Qmf):

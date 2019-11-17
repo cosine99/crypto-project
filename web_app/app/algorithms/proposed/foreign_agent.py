@@ -17,7 +17,8 @@ class ForeignAgent:
         self.SKfa = SKfa
 
 
-    def aesk_step_2(self, home_agent, EID1, Vm, Qm, Nm):
+    def aesk_step_2(self, EID1, Vm, Qm, Nm, home_agent, mobile_user):
+        self.mobile_user = mobile_user;
         print('Step 2')
 
         self.Qm = Qm
