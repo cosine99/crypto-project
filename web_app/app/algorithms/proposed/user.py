@@ -1,121 +1,177 @@
 from utility import *
 from home_agent import HomeAgent
 from foreign_agent import ForeignAgent
+from time import time
+
 
 class MobileUser:
 
-    def registration(self, home_agent, foreign_agent):
+    def registration(self, IDmu, PWmu, s, home_agent, foreign_agent):
         # print('Agent Registration Phase:')
         # foreign_agent.agent_registration_1(home_agent, self)
 
         print('User Registration Phase:')
 
-        print('Step 1')
-        self.IDmu = input('Enter IDmu: ')
-        self.PWmu = input('Enter PWmu: ')
-        self.s = input('Enter a random number: ')
+        start = time()
 
+        # step 1
+        self.IDmu = IDmu
+        self.PWmu = PWmu
+        self.s = s
         self.EID = xor(hash(xor(self.IDmu, self.PWmu)), self.s)
-        print('EID: ', self.EID)
-        self.S = home_agent.user_registration_2(self.EID)
+        status, self.S = home_agent.user_registration_2(self.EID)
 
-        print('Step 3') 
+        if status == 0:
+            # step 3
+            self.SPW = xor(xor(self.S, hash(self.PWmu)), hash(self.IDmu + self.s))
+            self.s1 = xor(self.s, hash(self.IDmu + self.PWmu))
 
-        self.SPW = xor(xor(self.S, hash(self.PWmu)), hash(self.IDmu + self.s))
-        print('SPW: ', self.SPW)
-        self.s1 = xor(self.s, hash(self.IDmu + self.PWmu))
-        print('Registration Completed')
+        end = time()
+        time_taken = end - start
+        print('Successful')
+
+        return status, time_taken
+
         
-
-    def aesk_step_1(self, home_agent, foreign_agent):
+    # NF in aesk_step_2, Nf2 in aesk_step_4
+    def aesk_step_1(self, PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent):
         print('AESK Phase')
 
-        print('Step 1')
+        start = time()
 
-        print('pw of mu : ', self.PWmu)
-        self.PW1mu = input('Enter password PW\'mu : ')
-
+        self.PW1mu = PW1mu
         # IMPLEMENT MATCH PASSWORD
-
         
-        self.snew = input('MU selects a ran number : ')
-        self.Nm = input('MU selects a ran number : ')
+        self.snew = snew
+        self.Nm = Nm
         s = xor(self.s1, hash(self.IDmu + self.PW1mu))
         self.EID1 = xor(hash(xor(self.IDmu, self.PW1mu)), s)
-
-        print('EID1: ', self.EID1)
-
         self.S1 = xor(xor(self.SPW, hash(self.PW1mu)), hash(self.IDmu + s))
         self.EIDnew = xor(hash(xor((self.IDmu), self.PW1mu)), self.snew)
         self.Vm = xor(self.EIDnew, hash(self.S1 + self.Nm))
         self.s1new = xor(self.snew, hash(self.IDmu + self.PW1mu))
         self.Qm = str(hash(str(self.EIDnew) + str(self.S1) + str(self.Nm)))
 
-        print('S1: ', self.S1)
-        print('EIDnew: ', self.EIDnew)
-        print('Vm: ', self.Vm)
-        print('Qm: ', self.Qm)
+        status = foreign_agent.aesk_step_2(self.EID1, self.Vm, self.Qm, self.Nm, Nf, Nf2, home_agent, self)
 
-        foreign_agent.aesk_step_2(self.EID1, self.Vm, self.Qm, self.Nm, home_agent, self)
+        end = time()
+        time_taken = end - start
+        print('Successful')
+
+        return status, time_taken
+
 
     def aesk_step_5(self, Vf2, Qf2, Nf2, foreign_agent):
         self.Snew = xor(Vf2, hash(str(self.S) + Nf2))
         self.Nf2 = Nf2
 
-        if(Qf2 == hash(self.EID + self.Snew + Nf2)):
-            print('Qf2 matches')
-        else:
+        if(Qf2 != hash(self.EID + self.Snew + Nf2)):
             print('Error at aesk_step_5')
-            return 0
+            return 1
 
         self.SPWnew = xor(self.Snew, xor(hash(self.PWmu), hash(self.IDmu + self.s)))
-
         self.Kmf = hash(self.Nm + Nf2 + str(self.S))
         self.Qmf = hash(self.Nm + str(self.S) + Nf2 + self.Snew)
 
-        foreign_agent.aesk_step_6(self.Qmf)
+        return foreign_agent.aesk_step_6(self.Qmf)
 
 
-        print('AESK Phase Completed')
-
-    def session_key_update(self, home_agent, foreign_agent):
+    def session_key_update(self, Nstarm, Nstarf, Kmf, home_agent, foreign_agent):
         print('Session Key Update')
-        self.Nstarm = input('New Random Number')
+
+        start = time()
+
+        self.Nstarm = Nstarm
+        self.Kmf_new = Kmf
         self.Um = xor(self.Nstarm, hash(str(self.S) + self.Nm + self.Nf2))
         self.Qstarm = hash(xor(self.Nstarm, self.S))
-        foreign_agent.sk_update_2(self.Um, self.Qstarm, self)
+
+        status = foreign_agent.sk_update_2(self.Um, self.Qstarm, Nstarf, self)
+
+        end = time()
+        time_taken = end - start
+        print('Successful')   
+
+        return status, time_taken
+
 
     def sk_update_3(self, Uf, Qstarf):
         self.Nstarf = xor(Uf, hash(str(self.S) + self.Nf2 + self.Nm))
 
         if(Qstarf != hash(xor(self.Nstarf, self.S))):
             print('Qstarf doesnt match')
-            return 0
+            return 1
 
-        self.Kmf = input('New Session Key:')
+        self.Kmf = self.Kmf_new
         self.Qstarmf = hash(xor(xor(self.Nstarm, self.Nstarf), self.S))
 
-        foreign_agent.sk_update_4(self.Qstarmf, self)
+        return foreign_agent.sk_update_4(self.Qstarmf, self)
 
-        print('Successful')
 
-    def password_altered(self, home_agent, foreign_agent):
-        print('password_altered phase')
+    def password_altered(self, IDmu, PWmu, PWmu_new, home_agent, foreign_agent):
+        print('Password altered phase')
 
-        IDmu = input('Input IDmu')
-        PWmu = input('Input PWmu')
+        start = time()
+
+        IDmu = IDmu
+        PWmu = PWmu
 
         if(self.IDmu != IDmu or self.PWmu != PWmu):
             print('Credentials dont match')
-            return 0
-        self.s = xor(self.s1, hash(self.IDmu + self.PWmu))
-        self.PWmu = input('new password')
+            return 1
 
-        
+        self.s = xor(self.s1, hash(self.IDmu + self.PWmu))
+        self.PWmu = PWmu_new        
         self.EIDnew = xor(hash(xor(self.IDmu, PWmu)), self.s)
 
-        home_agent.password_altered_3(self.EIDnew, self)
+        status = home_agent.password_altered_3(self.EIDnew, self)        
+
+        end = time()
+        time_taken = end - start
+        print('Successful')
+
+        return status, time_taken
+
 
     def password_altered_4(self, Snew):
         self.SPW = xor(xor(Snew, hash(self.PWmu)), hash(self.IDmu + self.s))
-        print('Successful')
+                
+        return 0
+
+if __name__ == '__main__':
+    home_agent = HomeAgent()
+    foreign_agent = ForeignAgent()
+    user = MobileUser()
+
+    foreign_agent.agent_registration_1(home_agent)
+
+    print('Registration Phase \n')
+    IDmu = input()
+    PWmu = input()
+    s = input()    
+    user.registration(IDmu, PWmu, s, home_agent, foreign_agent)
+    print('\nRegistration Completed')
+
+    print('\nAESK phase \n')
+    PW1mu = input()
+    snew = input()
+    Nm = input()
+    Nf = input()
+    Nf2 = input()
+    user.aesk(PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent)
+    print('\n AESK Completed')
+
+    print('\n SK update phase \n')
+    Nstarm = input()
+    Nstarf = input()
+    Kmf = input()    
+    user.session_key_update(Nstarm, Nstarf, Kmf, home_agent, foreign_agent)
+    print('Finished')
+
+    print('\nAlter password \n')    
+    IDmu = input()
+    PWmu = input()
+    PWmu_new = input()  
+    user.password_altered()
+    print('Finished')
+    
