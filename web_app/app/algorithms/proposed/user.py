@@ -1,6 +1,4 @@
 from utility import *
-from home_agent import HomeAgent
-from foreign_agent import ForeignAgent
 from time import time
 
 
@@ -34,7 +32,7 @@ class MobileUser:
 
         
     # NF in aesk_step_2, Nf2 in aesk_step_4
-    def aesk_step_1(self, PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent):
+    def aesk(self, PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent):
         print('AESK Phase')
 
         start = time()
@@ -95,7 +93,7 @@ class MobileUser:
         return status, time_taken
 
 
-    def sk_update_3(self, Uf, Qstarf):
+    def sk_update_3(self, Uf, Qstarf, foreign_agent):
         self.Nstarf = xor(Uf, hash(str(self.S) + self.Nf2 + self.Nm))
 
         if(Qstarf != hash(xor(self.Nstarf, self.S))):
@@ -137,41 +135,3 @@ class MobileUser:
         self.SPW = xor(xor(Snew, hash(self.PWmu)), hash(self.IDmu + self.s))
                 
         return 0
-
-if __name__ == '__main__':
-    home_agent = HomeAgent()
-    foreign_agent = ForeignAgent()
-    user = MobileUser()
-
-    foreign_agent.agent_registration_1(home_agent)
-
-    print('Registration Phase \n')
-    IDmu = input()
-    PWmu = input()
-    s = input()    
-    user.registration(IDmu, PWmu, s, home_agent, foreign_agent)
-    print('\nRegistration Completed')
-
-    print('\nAESK phase \n')
-    PW1mu = input()
-    snew = input()
-    Nm = input()
-    Nf = input()
-    Nf2 = input()
-    user.aesk(PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent)
-    print('\n AESK Completed')
-
-    print('\n SK update phase \n')
-    Nstarm = input()
-    Nstarf = input()
-    Kmf = input()    
-    user.session_key_update(Nstarm, Nstarf, Kmf, home_agent, foreign_agent)
-    print('Finished')
-
-    print('\nAlter password \n')    
-    IDmu = input()
-    PWmu = input()
-    PWmu_new = input()  
-    user.password_altered()
-    print('Finished')
-    
