@@ -1,5 +1,14 @@
-from utility import *
 from time import time
+import uuid
+import hashlib
+import random
+from itertools import cycle
+import base64
+
+
+def xor(data, key):
+    xored = ''.join(chr(ord(x) ^ ord(y)) for (x, y) in zip(str(data), cycle(str(key))))
+    return xored
 
 
 class MobileUser:
@@ -94,7 +103,7 @@ class MobileUser:
         return foreign_agent.sk_update_4(self.Qstarmf, self)
 
 
-    def password_altered(self, IDmu, PWmu, PWmu_new):
+    def password_altered(self, IDmu, PWmu, PWmu_new, home_agent, foreign_agent):
         print('password_altered phase')
 
         start = time()
