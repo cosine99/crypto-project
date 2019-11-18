@@ -79,7 +79,7 @@ class ForeignAgent:
         self.Uf = xor(self.Nstarf, hash(str(self.Snew) + self.Nf2 + self.Nstarm))
         self.Qstarf = hash(xor(self.Nstarf, self.Snew))
 
-        return mobile_user.sk_update_3(self.Uf, self.Qstarf)
+        return mobile_user.sk_update_3(self.Uf, self.Qstarf, self)
 
 
     def sk_update_4(self, Qstarmf, mobile_user):

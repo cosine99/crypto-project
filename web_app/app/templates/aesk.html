@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block content %}
+
+
+<div class="card bg-light my-4" style="width:400px">
+  <div class="card-header text-center">
+   <h4> AESK </h4>
+  </div>
+
+  <div class="card-body ">
+    <form action="" method="post" novalidate>
+      {{form.hidden_tag()}}
+      <div>
+        {{ form.PW1mu.label }} <br />
+        {{ form.PW1mu(size=32,class_="form-control") }}
+        {% for error in form.PW1mu.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+      <div>
+        {{ form.snew.label }} <br />
+        {{ form.snew(size=32,class_="form-control") }}
+        {% for error in form.snew.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+      <div>
+        {{ form.Nm.label }} <br />
+        {{ form.Nm(class_="form-control") }}
+        {% for error in form.Nm.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+       <div>
+        {{ form.Nf.label }} <br />
+        {{ form.Nf(size=32,class_="form-control") }}
+        {% for error in form.Nf.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+      <div>
+        {{ form.Nf2.label }} <br />
+        {{ form.Nf2(class_="form-control") }}
+        {% for error in form.Nf2.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+      <div class = "text-center">
+      {{ form.submit() }}
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

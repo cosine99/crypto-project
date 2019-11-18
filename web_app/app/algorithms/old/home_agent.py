@@ -10,7 +10,7 @@ class HomeAgent:
     def user_registration_2(self, EID):
         S = hash(EID + str(hash(self.SKha)))
 
-        return S
+        return 0, S
 
 
     def a_step3(self, EID1, Vm, Vf, Qf, Nm, IDfa, foreign_agent):
@@ -28,5 +28,5 @@ class HomeAgent:
         self.Snew = hash(str(self.EID1new) + str(hash(self.SKha)))
         self.Vh = xor((self.EID1new + str(self.S1) + str(self.Snew)), hash(str(self.SKfa) + self.Nf))
 
-        return foreign_agent.aesk_step_4(self.Vh, self.Snew, self)
+        return foreign_agent.aesk_step_4(self.Vh, self.Snew, self.Snew, self)
         

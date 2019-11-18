@@ -1,6 +1,4 @@
 from utility import *
-from home_agent import HomeAgent
-from foreign_agent import ForeignAgent
 from time import time
 
 
@@ -83,7 +81,7 @@ class MobileUser:
         return status, time_taken
 
 
-    def sk_update_3(self, Uf, Qstarf):
+    def sk_update_3(self, Uf, Qstarf, foreign_agent):
         self.Nstarf = xor(Uf, hash(str(self.S) + self.Nf2 + self.Nm))
 
         if(Qstarf != hash(xor(self.Nstarf, self.S))):
@@ -105,7 +103,7 @@ class MobileUser:
             print('Credentials dont match')
             return 1
 
-        self.s = xor(self.s1, hash(self.IDmu + self.PWmu))
+        self.s = xor(self.S1, hash(self.IDmu + self.PWmu))
         self.PWmu = PWmu_new        
         self.EIDnew = xor(hash(xor(self.IDmu, PWmu)), self.s)
         self.SPW = xor(Snew, hash(self.PWmu))
@@ -114,41 +112,3 @@ class MobileUser:
         time_taken = end - start
 
         return 0, time_taken
-
-
-if __name__ == '__main__':
-    home_agent = HomeAgent()
-    foreign_agent = ForeignAgent()
-    user = MobileUser()
-
-    foreign_agent.agent_registration_1(home_agent)
-
-    print('Registration Phase \n')
-    IDmu = input()
-    PWmu = input()
-    s = input()    
-    user.registration(IDmu, PWmu, s, home_agent, foreign_agent)
-    print('\nRegistration Completed')
-
-    print('\nAESK phase \n')
-    PW1mu = input()
-    snew = input()
-    Nm = input()
-    Nf = input()
-    Nf2 = input()
-    user.aesk(PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent)
-    print('\n AESK Completed')
-
-    print('\n SK update phase \n')
-    Nstarm = input()
-    Nstarf = input()
-    Kmf = input()    
-    user.session_key_update(Nstarm, Nstarf, Kmf, home_agent, foreign_agent)
-    print('Finished')
-
-    print('\nAlter password \n')    
-    IDmu = input()
-    PWmu = input()
-    PWmu_new = input()  
-    user.password_altered()
-    print('Finished')
