@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block content %}
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+th, td {
+  padding: 12px;
+}
+</style>
+<div class="card my-4" style="width: 600px;">
+  
+  <div class="card-header"><h4><strong>Time Taken</strong></h4>
+    <br/>
+        <table style="width:100%">
+          <tr>
+            <th>Phase</th>
+            <th>Old Algorithm</th>
+            <th>Proposed Algorithm</th>
+          </tr>
+          <tr>
+            <td>Registration</td>
+            <td>{{time_taken['old']['registration']}}</td>
+            <td>{{time_taken['proposed']['registration']}}</td>
+          </tr>
+          <tr>
+            <td>AESK</td>
+            <td>{{time_taken['old']['aesk']}}</td>
+            <td>{{time_taken['proposed']['aesk']}}</td>
+          </tr>
+          <tr>
+            <td>Session Key Update</td>
+            <td>{{time_taken['old']['sk_update']}}</td>
+            <td>{{time_taken['proposed']['sk_update']}}</td>
+          </tr>
+          <tr>
+            <td>Password Altered</td>
+            <td>{{time_taken['old']['password_altered']}}</td>
+            <td>{{time_taken['proposed']['password_altered']}}</td>
+          </tr>
+          <tr>
+            <th>Total</th>
+            <th>{{time_taken['old']['registration'] + time_taken['old']['aesk'] + time_taken['old']['sk_update'] + time_taken['old']['password_altered']}}</th>
+            <th>{{time_taken['proposed']['registration'] + time_taken['proposed']['aesk'] + time_taken['proposed']['sk_update'] + time_taken['proposed']['password_altered']}}</th>
+          </tr>
+      </table>             
+  </div>
+</div>
+
+
+ {% endblock %}

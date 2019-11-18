@@ -40,8 +40,8 @@ def proposed():
 
 @app.route('/stats', methods = ['GET', 'POST'])
 def stats():
-    form = Menu()
-    return render_template('menu.html', form = form)
+    
+    return render_template('stats.html', time_taken = time_taken)
 
 
 @app.route('/registration/<algo>', methods = ['GET', 'POST'])
@@ -64,11 +64,12 @@ def registration(algo):
         s = form.s.data
         status, time = mobile_user.registration(IDmu, PWmu, s, home_agent, foreign_agent)
         if status == 0:
-            flash('success')
+            flash('Registration Successful')
+            time_taken[algo]['registration'] = time
         else:
             flash('error')
 
-        return redirect(url_for('stats'))
+        return redirect(url_for(algo))
 
     return render_template('registration.html', form = form)
 
@@ -94,11 +95,12 @@ def aesk(algo):
         Nf2 = form.Nf2.data
         status, time = mobile_user.aesk(PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent)
         if status == 0:
-            flash('success')
+            flash('AESK Successful')
+            time_taken[algo]['aesk'] = time
         else:
             flash('error')
 
-        return redirect(url_for('stats'))
+        return redirect(url_for(algo))
 
     return render_template('aesk.html', form = form)
 
@@ -122,11 +124,12 @@ def sk_update(algo):
         Kmf = form.Kmf.data
         status, time = mobile_user.session_key_update(Nstarm, Nstarf, Kmf, home_agent, foreign_agent)
         if status == 0:
-            flash('success')
+            flash('SK Update Successful')
+            time_taken[algo]['sk_update'] = time
         else:
             flash('error')
 
-        return redirect(url_for('stats'))
+        return redirect(url_for(algo))
 
     return render_template('sk_update.html', form = form)
 
@@ -150,10 +153,11 @@ def password_altered(algo):
         PWmu_new = form.PWmu_new.data
         status, time = mobile_user.password_altered(IDmu, PWmu, PWmu_new, home_agent, foreign_agent)
         if status == 0:
-            flash('success')
+            flash('Password Alter Successful')
+            time_taken[algo]['password_altered'] = time
         else:
             flash('error')
 
-        return redirect(url_for('stats'))
+        return redirect(url_for(algo))
 
     return render_template('password_altered.html', form = form)
