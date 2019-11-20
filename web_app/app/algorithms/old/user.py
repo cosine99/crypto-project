@@ -112,12 +112,12 @@ class MobileUser:
             print('Credentials dont match')
             return 1
 
-        self.s = xor(self.S1, hash(self.IDmu + self.PWmu))
         self.PWmu = PWmu_new        
         self.EIDnew = xor(hash(xor(self.IDmu, PWmu)), self.s)
-        self.SPW = xor(Snew, hash(self.PWmu))
+        self.SPW = xor(self.Snew, hash(self.PWmu))
 
         end = time()
         time_taken = end - start
+
 
         return 0, time_taken
