@@ -93,6 +93,9 @@ def aesk(algo):
         Nm = form.Nm.data
         Nf = form.Nf.data
         Nf2 = form.Nf2.data
+        if(mobile_user.PWmu != PW1mu):
+            flash ('Incorrect Password')
+            return redirect('/aesk/{}'.format(algo))
         status, time = mobile_user.aesk(PW1mu, snew, Nm, Nf, Nf2, home_agent, foreign_agent)
         if status == 0:
             flash('AESK Successful')

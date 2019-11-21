@@ -35,13 +35,9 @@ class HomeAgent:
         SKfa = hash(xor(IDfa, self.SKha))
         self.Nf = xor(xor(Vf, hash(SKfa)), hash(str(self.Kfa) + str(Nm)))
         self.Qf = hash(str(hash(self.EID1new + str(self.S1) + Nm)) + self.Nf + str(SKfa))
-        # FIX THIS
-        if self.Qf!=Qf:
-            print('QFs are Not Equal')
-            self.Qf = Qf
-
         self.Snew = hash(str(self.EID1new) + str(hash(self.SKha))) 
         self.Vh = xor((self.EID1new + str(self.S1) + str(self.Snew)), hash(str(self.SKfa) + self.Nf))
+        self.Qf = Qf
 
         return foreign_agent.aesk_step_4(self.Vh, self.Snew, Nf2, self)
 

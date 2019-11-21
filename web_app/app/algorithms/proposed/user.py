@@ -14,8 +14,6 @@ def xor(data, key):
 class MobileUser:
 
     def registration(self, IDmu, PWmu, s, home_agent, foreign_agent):
-        # print('Agent Registration Phase:')
-        # foreign_agent.agent_registration_1(home_agent, self)
 
         print('User Registration Phase:')
 
@@ -47,8 +45,6 @@ class MobileUser:
         start = time()
 
         self.PW1mu = PW1mu
-        # IMPLEMENT MATCH PASSWORD
-        
         self.snew = snew
         self.Nm = Nm
         s = xor(self.s1, hash(self.IDmu + self.PW1mu))
