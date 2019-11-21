@@ -24,7 +24,6 @@ class ForeignAgent:
         print('Agent Registration Phase:')
 
         start = time()
-        # self.mobile_user = mobile_user
         self.Kfa = hash(self.IDfa + self.b)
         status = home_agent.agent_registration_2(self.IDfa, self.Kfa, self)
 
@@ -56,7 +55,7 @@ class ForeignAgent:
     def aesk_step_4(self, Vh, Snew, Nf2, home_agent):
         self.Snew = Snew
 
-        if(self.Qm != str(hash(str(self.EIDnew) + str(Snew) + str(self.Nm)))): #JUGAAD HERE
+        if(self.Qm != str(hash(str(self.EIDnew) + str(Snew) + str(self.Nm)))):
             print('Failure at step 4')
             return 1
 

@@ -10,6 +10,14 @@
     <form action="" method="post" novalidate>
       {{form.hidden_tag()}}
       <div>
+        {{ form.IDmu.label }} <br />
+        {{ form.IDmu(size=32,class_="form-control") }}
+        {% for error in form.IDmu.errors %}
+          <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+      </div>
+      <br/>
+      <div>
         {{ form.PW1mu.label }} <br />
         {{ form.PW1mu(size=32,class_="form-control") }}
         {% for error in form.PW1mu.errors %}

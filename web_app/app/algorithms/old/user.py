@@ -41,9 +41,6 @@ class MobileUser:
         start = time()
 
         self.PW1mu = PW1mu
-
-        # IMPLEMENT MATCH PASSWORD
-
         self.snew = snew
         self.Nm = Nm
         self.EID1 = xor(hash(xor(self.IDmu, self.PW1mu)), self.s)
